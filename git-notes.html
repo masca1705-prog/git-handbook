@@ -3,68 +3,1011 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Git 작업 노트</title>
+    <meta
+      name="description"
+      content="Git Bash와 GitHub 팀 프로젝트를 위한 상황별 Git 명령어 실습 노트"
+    />
+    <title>실무 Git 작업 노트</title>
     <link rel="stylesheet" href="git-notes.css" />
   </head>
   <body>
-    <main class="note">
-      <header>
-        <p class="label">MY DEV NOTE / 01</p>
+    <a class="skip" href="#main-content">본문 바로가기</a>
 
-        <h1>함께 정리한 실무 Git 작업 노트</h1>
-        <p
-          class="note-sequence"
-          aria-label="저장, 선택, 커밋 순서로 변경 내용을 기록합니다."
-        >
-          <span>저장</span>
-          <svg
-            class="flow-arrow"
-            viewBox="0 0 24 16"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M2 8h19M15 2l6 6-6 6" />
-          </svg>
-          <span>선택</span>
-          <svg
-            class="flow-arrow"
-            viewBox="0 0 24 16"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M2 8h19M15 2l6 6-6 6" />
-          </svg>
-          <span>커밋</span>
+    <header class="site-header">
+      <div class="shell">
+        <p class="eyebrow">MY DEV NOTE · GIT / GITHUB</p>
+        <h1>실무 Git 작업 노트</h1>
+        <p class="intro">
+          상황을 선택하고 명령어를 순서대로 확인하세요. 영어 뜻 · 기능 · 실행
+          결과 · 주의사항까지 정리했습니다.
         </p>
-      </header>
-      <section class="concepts">
-        <h2>Git과 GitHub</h2>
-        <dl>
-          <div>
-            <dt>Git</dt>
-            <dd>
-              내 컴퓨터에서 파일의 변경 내용을 기록하고 이전 기록을 확인합니다.
-            </dd>
-          </div>
-          <div>
-            <dt>GitHub</dt>
-            <dd>Git 저장소를 온라인에 올려 다른 사람과 공유합니다.</dd>
-          </div>
-        </dl>
-      </section>
-      <section class="workflow">
-        <h2>변경 내용을 기록하는 순서</h2>
+
+        <div class="quickline" aria-label="Git 작업 순서">
+          <span>상태 확인</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>브랜치 이동</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>수정</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>스테이징</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>커밋</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>푸시</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12H20M14 6L20 12L14 18" />
+          </svg>
+
+          <span>PR</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="shell layout">
+      <!-- 빠른 목차 -->
+      <nav class="toc" aria-label="상황별 목차">
+        <h2>빠른 목차</h2>
         <ol>
-          <li><strong>저장</strong><span>파일에 반영</span></li>
-          <li><strong>선택</strong><span>git add</span></li>
-          <li><strong>커밋</strong><span>설명과 함께 기록</span></li>
+          <li><a href="#concepts">Git과 GitHub 개념</a></li>
+          <li><a href="#clone">프로젝트 처음 내려받기</a></li>
+          <li><a href="#branch">main 최신화 후 브랜치 생성</a></li>
+          <li><a href="#commit">스테이징과 커밋</a></li>
+          <li><a href="#first-push">처음 푸시</a></li>
+          <li><a href="#next-push">추가 푸시</a></li>
+          <li><a href="#merge">작업 브랜치에 main 반영</a></li>
+          <li><a href="#stash">작업 임시 보관과 복원</a></li>
+          <li><a href="#prune">PR 병합 후 브랜치 정리</a></li>
+          <li><a href="#inspect">상태와 연결 정보 확인</a></li>
         </ol>
-      </section>
-      <footer>작업 전후에는 git status로 현재 상태를 확인합니다.</footer>
-      <section>
-        <h2>브랜치</h2>
-        <p>브랜치는 작업 흐름의 최신 커밋을 가리미는 이름입니다</p>
-      </section>
-    </main>
+        <p class="toc-hint">
+          명령어 옆의 복사 버튼을 누르면 해당 명령어가 복사됩니다.
+        </p>
+      </nav>
+
+      <main id="main-content" class="content">
+        <div class="notice">
+          <strong>실습 전 확인</strong>
+          <p>
+            Windows Git Bash, 원격 저장소 이름
+            <code>origin</code>, 기본 브랜치 <code>main</code>을 기준으로
+            작성했습니다. <code>저장소URL</code>, <code>파일명</code>,
+            <code>작업브랜치명</code>은 실제 값으로 바꾸세요.
+          </p>
+        </div>
+
+        <!-- 01. 기본 개념 -->
+        <section id="concepts" class="panel concepts">
+          <div class="section-head">
+            <span class="number">01</span>
+            <div>
+              <h2>Git과 GitHub 개념</h2>
+              <p>작업 전에 알아야 할 기본 용어입니다.</p>
+            </div>
+          </div>
+
+          <dl class="definitions">
+            <div>
+              <dt>Git</dt>
+              <dd>
+                파일 변경 이력을 기록하는 분산 버전 관리 도구입니다. 커밋과
+                브랜치를 관리합니다.
+              </dd>
+            </div>
+            <div>
+              <dt>GitHub</dt>
+              <dd>
+                Git 저장소를 온라인에서 공유하고 Pull Request(PR)로
+                검토·병합하는 협업 서비스입니다.
+              </dd>
+            </div>
+            <div>
+              <dt>origin</dt>
+              <dd>
+                원격 저장소의 별명입니다. 보통 GitHub 저장소를 가리킵니다.
+              </dd>
+            </div>
+            <div>
+              <dt>main</dt>
+              <dd>팀에서 통합된 코드를 관리하는 기준 브랜치입니다.</dd>
+            </div>
+            <div>
+              <dt>origin/main</dt>
+              <dd>
+                마지막 fetch 등으로 갱신한 원격 main의 로컬 추적 참조입니다.
+              </dd>
+            </div>
+            <div>
+              <dt>Local / Remote</dt>
+              <dd>
+                Local은 내 컴퓨터의 저장소, Remote는 GitHub 같은 원격
+                저장소입니다.
+              </dd>
+            </div>
+            <div>
+              <dt>feature/브랜치명</dt>
+              <dd>
+                특정 기능을 작업하는 브랜치입니다. 예:
+                <code>feature/main-header</code>
+              </dd>
+            </div>
+            <div>
+              <dt>Working Tree / Staging / Commit</dt>
+              <dd>
+                파일 수정 → 커밋 대상 선택 → 로컬 변경 이력 기록의 세
+                단계입니다.
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- 02. 프로젝트 처음 내려받기 -->
+        <section id="clone" class="panel clone">
+          <div class="section-head">
+            <span class="number">02</span>
+            <div>
+              <h2>GitHub 프로젝트 처음 내려받기</h2>
+              <p>원격 저장소를 내 컴퓨터로 처음 복제합니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                프로젝트 복제 실행 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>cd /c/workspace</code></td>
+                  <td>프로젝트를 저장할 폴더로 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git clone 저장소URL</code></td>
+                  <td>GitHub 저장소와 커밋 이력 복제</td>
+                </tr>
+                <tr>
+                  <td><code>cd 저장소명</code></td>
+                  <td>복제된 프로젝트 폴더로 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>현재 브랜치와 변경 상태 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git remote -v</code></td>
+                  <td>원격 저장소 주소 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>cd = Change Directory</dt>
+              <dd>현재 작업 폴더를 변경합니다.</dd>
+            </div>
+            <div>
+              <dt>clone = 복제하다</dt>
+              <dd>저장소의 파일과 커밋 이력을 복제합니다.</dd>
+            </div>
+            <div>
+              <dt>remote = 원격 / -v = verbose(상세)</dt>
+              <dd>등록된 원격 저장소 이름과 URL을 출력합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              프로젝트 폴더와 .git 저장소가 생성되고, 일반적으로 origin도 자동
+              등록됩니다. 복제한 저장소에서 git init이나 git remote add origin을
+              다시 실행할 필요는 없습니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 03. 브랜치 생성 -->
+        <section id="branch" class="panel branch">
+          <div class="section-head">
+            <span class="number">03</span>
+            <div>
+              <h2>main 최신화 후 새 작업 브랜치 생성</h2>
+              <p>최신 main을 기준으로 새 작업을 시작합니다.</p>
+            </div>
+          </div>
+
+          <div class="precondition">
+            <strong>실행 전 조건</strong>
+            <span>커밋하지 않은 변경 사항을 먼저 정리합니다.</span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                새 브랜치 생성 실행 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>변경 사항과 현재 브랜치 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git switch main</code></td>
+                  <td>로컬 main으로 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git pull origin main</code></td>
+                  <td>원격 main의 최신 코드 반영</td>
+                </tr>
+                <tr>
+                  <td><code>git switch -c feature/main-header</code></td>
+                  <td>새 작업 브랜치 생성 후 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git branch</code></td>
+                  <td>현재 브랜치 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>switch = 전환하다</dt>
+              <dd>현재 브랜치를 변경합니다.</dd>
+            </div>
+            <div>
+              <dt>-c = create(생성)</dt>
+              <dd>새 브랜치를 생성합니다.</dd>
+            </div>
+            <div>
+              <dt>pull = 끌어오다</dt>
+              <dd>원격 변경 내용을 가져와 현재 브랜치에 통합합니다.</dd>
+            </div>
+            <div>
+              <dt>branch = 가지</dt>
+              <dd>기능별로 독립적인 작업 흐름을 관리합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              git branch에서 별표(*)가 붙은 브랜치가 현재 작업 브랜치입니다.
+              이미 존재하는 브랜치로 이동할 때는
+              <code>git switch 작업브랜치명</code>을 사용합니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 04. 스테이징과 커밋 -->
+        <section id="commit" class="panel commit">
+          <div class="section-head">
+            <span class="number">04</span>
+            <div>
+              <h2>변경 내용 스테이징과 커밋</h2>
+              <p>수정한 파일을 선택하고 로컬 이력으로 기록합니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                변경 사항 기록 순서 — A 또는 B 선택
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>수정 파일 확인</td>
+                </tr>
+                <tr class="choice">
+                  <td>
+                    <span class="chip">방법 A</span>
+                    <code>git add .</code>
+                  </td>
+                  <td>현재 폴더 아래 변경 사항 전체 스테이징</td>
+                </tr>
+                <tr class="choice">
+                  <td>
+                    <span class="chip">방법 B</span>
+                    <code>git add 파일명</code>
+                  </td>
+                  <td>지정한 파일만 스테이징</td>
+                </tr>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>커밋할 파일 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git commit -m "설명"</code></td>
+                  <td>스테이징된 변경 사항 커밋</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>add = 추가하다</dt>
+              <dd>변경 사항을 스테이징 영역에 올립니다.</dd>
+            </div>
+            <div>
+              <dt>commit = 기록하다, 확정하다</dt>
+              <dd>스테이징된 변경 사항을 로컬 이력으로 기록합니다.</dd>
+            </div>
+            <div>
+              <dt>-m = message(메시지)</dt>
+              <dd>커밋 메시지를 직접 지정합니다.</dd>
+            </div>
+            <div>
+              <dt>. = 현재 폴더</dt>
+              <dd>현재 폴더를 기준으로 변경 사항을 선택합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>선택 명령어 및 주의사항</strong>
+            <p>
+              <code>git add .</code>과 <code>git add 파일명</code>은 순서대로
+              실행하는 명령어가 아닙니다. 필요한 방법 하나를 선택합니다. 커밋은
+              로컬 저장소에 기록되며, GitHub로 전송되지는 않습니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 05. 첫 푸시 -->
+        <section id="first-push" class="panel push">
+          <div class="section-head">
+            <span class="number">05</span>
+            <div>
+              <h2>새 브랜치를 처음 푸시할 때</h2>
+              <p>로컬 커밋을 GitHub에 전송하고 추적 연결을 설정합니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                첫 푸시 실행 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>현재 브랜치와 변경 사항 확인</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="chip">변경 시</span>
+                    <code>git add .</code>
+                  </td>
+                  <td>변경 사항 스테이징</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="chip">변경 시</span>
+                    <code>git commit -m "설명"</code>
+                  </td>
+                  <td>변경 사항 커밋</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>git push -u origin "푸시할 작업 브랜치 이름"</code>
+                  </td>
+                  <td>첫 푸시 및 원격 추적 연결 설정</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>push = 밀어 올리다</dt>
+              <dd>로컬 커밋을 원격 저장소로 전송합니다.</dd>
+            </div>
+            <div>
+              <dt>-u = set-upstream</dt>
+              <dd>현재 브랜치의 원격 추적 연결을 설정합니다.</dd>
+            </div>
+            <div>
+              <dt>origin</dt>
+              <dd>전송할 원격 저장소 이름입니다.</dd>
+            </div>
+          </dl>
+
+          <h3>GitHub에서 PR 생성하기</h3>
+          <ol class="steps">
+            <li>GitHub 저장소 페이지를 엽니다.</li>
+            <li>
+              Compare &amp; pull request 또는 New pull request를 선택합니다.
+            </li>
+            <li>base는 main, compare는 내 작업 브랜치인지 확인합니다.</li>
+            <li>제목과 변경 내용을 작성하고 PR을 생성합니다.</li>
+            <li>팀의 리뷰와 검사를 거쳐 PR을 병합합니다.</li>
+          </ol>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              GitHub에 작업 브랜치가 생성되거나 갱신됩니다. 이미 커밋한 경우
+              add와 commit을 다시 실행할 필요가 없습니다. Push만으로 main에
+              병합되는 것은 아닙니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 06. 추가 푸시 -->
+        <section id="next-push" class="panel push-again">
+          <div class="section-head">
+            <span class="number">06</span>
+            <div>
+              <h2>같은 브랜치에서 다시 푸시할 때</h2>
+              <p>첫 푸시 이후 추가 수정 사항을 반영합니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                추가 푸시 실행 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>수정 파일과 현재 브랜치 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git add .</code></td>
+                  <td>변경 사항 스테이징</td>
+                </tr>
+                <tr>
+                  <td><code>git commit -m "설명"</code></td>
+                  <td>추가 변경 사항 커밋</td>
+                </tr>
+                <tr>
+                  <td><code>git push</code></td>
+                  <td>추적 연결된 원격 브랜치로 전송</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>첫 푸시와 추가 푸시의 차이</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>첫 푸시</dt>
+              <dd>
+                <code>git push -u origin 브랜치명</code>으로 원격 추적 연결을
+                설정합니다.
+              </dd>
+            </div>
+            <div>
+              <dt>추가 푸시</dt>
+              <dd>
+                추적 연결이 설정되어 있으면 일반적으로 <code>git push</code>만
+                사용합니다.
+              </dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              새로운 커밋이 GitHub의 작업 브랜치에 반영됩니다. 이미 커밋한 경우
+              push만 실행하면 됩니다. 원격에 다른 새 커밋이 있다면 푸시가 거부될
+              수 있습니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 07. 최신 main 병합 -->
+        <section id="merge" class="panel merge">
+          <div class="section-head">
+            <span class="number">07</span>
+            <div>
+              <h2>현재 작업 브랜치에 최신 main 반영</h2>
+              <p>팀의 최신 main 변경 사항을 내 작업 브랜치에 합칩니다.</p>
+            </div>
+          </div>
+
+          <div class="precondition">
+            <strong>실행 전 조건</strong>
+            <span>
+              현재 브랜치가 내 작업 브랜치인지 확인하고, 미커밋 변경 사항은
+              커밋하거나 stash로 보관합니다.
+            </span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                최신 main 반영 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>현재 브랜치와 작업 상태 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git fetch origin</code></td>
+                  <td>원격 저장소의 최신 커밋과 참조 가져오기</td>
+                </tr>
+                <tr>
+                  <td><code>git merge origin/main</code></td>
+                  <td>최신 main을 현재 브랜치에 병합</td>
+                </tr>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>병합 완료 또는 충돌 여부 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 병합 흐름도 -->
+          <h3>병합 결과에 따른 실행 흐름도</h3>
+
+          <figure class="merge-flow" aria-labelledby="merge-flow-title">
+            <figcaption id="merge-flow-title">
+              충돌 발생 여부에 따른 병합 처리 순서
+            </figcaption>
+
+            <div class="flow-node">
+              <code>git fetch origin</code>
+            </div>
+
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+
+            <div class="flow-node">
+              <code>git merge origin/main</code>
+            </div>
+
+            <div class="flow-arrow" aria-hidden="true">↓</div>
+
+            <div class="flow-decision">충돌 발생 여부 확인</div>
+
+            <div class="flow-columns">
+              <div class="flow-path success">
+                <h4>충돌 없음</h4>
+                <p><code>git status</code></p>
+                <p><code>git push</code></p>
+                <small>병합 완료 확인 후 푸시</small>
+              </div>
+
+              <div class="flow-path conflict">
+                <h4>충돌 발생</h4>
+                <p>충돌 파일 수정</p>
+                <p><code>git add 파일명</code></p>
+                <p><code>git status</code></p>
+                <p><code>git commit</code></p>
+                <p><code>git push</code></p>
+                <small>충돌 해결 후 병합 완료</small>
+              </div>
+            </div>
+          </figure>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>fetch = 가져오다</dt>
+              <dd>
+                원격 저장소의 최신 정보를 가져오지만 현재 작업 파일에 바로
+                병합하지 않습니다.
+              </dd>
+            </div>
+            <div>
+              <dt>merge = 병합하다</dt>
+              <dd>지정한 브랜치의 변경 내용을 현재 브랜치에 합칩니다.</dd>
+            </div>
+            <div>
+              <dt>origin/main</dt>
+              <dd>원격 main을 추적하는 로컬 참조입니다.</dd>
+            </div>
+            <div>
+              <dt>conflict = 충돌</dt>
+              <dd>
+                Git이 자동으로 합칠 수 없어 직접 수정해야 하는 상태입니다.
+              </dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>충돌 시 주의사항</strong>
+            <p>
+              충돌 파일을 수정한 뒤 git add로 해결을 표시하고, git status로 남은
+              충돌이 없는지 확인합니다. 일반적인 충돌 병합은 git commit으로
+              완료합니다. 병합을 취소하려면 진행 중에
+              <code>git merge --abort</code>를 사용할 수 있습니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 08. stash -->
+        <section id="stash" class="panel pop">
+          <div class="section-head">
+            <span class="number">08</span>
+            <div>
+              <h2>작업 중 다른 브랜치로 이동할 때</h2>
+              <p>미커밋 변경 사항을 임시 보관하고 복원합니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                임시 보관과 복원 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>미커밋 변경 사항 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git stash push -u -m "임시 저장"</code></td>
+                  <td>변경 사항과 추적되지 않은 일반 파일 임시 보관</td>
+                </tr>
+                <tr>
+                  <td><code>git stash list</code></td>
+                  <td>임시 보관 목록 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git switch main</code></td>
+                  <td>main으로 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git pull origin main</code></td>
+                  <td>로컬 main 최신화</td>
+                </tr>
+                <tr>
+                  <td><code>git switch 작업브랜치명</code></td>
+                  <td>원래 작업 브랜치로 복귀</td>
+                </tr>
+                <tr>
+                  <td><code>git stash list</code></td>
+                  <td>복원할 stash 항목 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git stash pop</code></td>
+                  <td>가장 최근 stash 복원</td>
+                </tr>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>복원 상태와 충돌 여부 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>stash = 임시로 숨겨 보관하다</dt>
+              <dd>커밋하지 않은 변경 사항을 잠시 보관합니다.</dd>
+            </div>
+            <div>
+              <dt>push = 넣다 / pop = 꺼내다</dt>
+              <dd>
+                stash 목록에 저장하거나 복원합니다. GitHub로 전송하는 push와는
+                다른 기능입니다.
+              </dd>
+            </div>
+            <div>
+              <dt>-u = include untracked</dt>
+              <dd>
+                Git이 추적하지 않는 일반 파일도 포함합니다. 무시된 파일은
+                포함하지 않습니다.
+              </dd>
+            </div>
+            <div>
+              <dt>-m = message / list = 목록</dt>
+              <dd>설명을 붙이거나 저장된 stash 항목을 조회합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              git stash pop은 기본적으로 가장 최근 항목을 복원합니다. 다른
+              항목을 복원하려면 정확한 stash 항목을 지정해야 합니다. main을
+              pull해도 원래 feature 브랜치에 최신 main이 자동 병합되지는
+              않습니다. 필요하면 07번 절차를 별도로 진행합니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 09. PR 병합 후 정리 -->
+        <section id="prune" class="panel prune">
+          <div class="section-head">
+            <span class="number">09</span>
+            <div>
+              <h2>PR 병합 후 브랜치 정리</h2>
+              <p>GitHub에서 PR 병합과 원격 브랜치 삭제가 끝난 상황입니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                PR 병합 후 정리 순서
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>브랜치 이동 전 변경 사항 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git switch main</code></td>
+                  <td>로컬 main으로 이동</td>
+                </tr>
+                <tr>
+                  <td><code>git pull origin main</code></td>
+                  <td>PR이 병합된 최신 main 반영</td>
+                </tr>
+                <tr>
+                  <td><code>git fetch --prune origin</code></td>
+                  <td>삭제된 원격 브랜치의 추적 참조 정리</td>
+                </tr>
+                <tr>
+                  <td><code>git branch -r</code></td>
+                  <td>남아 있는 원격 추적 브랜치 확인</td>
+                </tr>
+                <tr>
+                  <td><code>git branch -d 작업브랜치명</code></td>
+                  <td>병합 여부를 검사해 로컬 브랜치 삭제</td>
+                </tr>
+                <tr>
+                  <td><code>git branch</code></td>
+                  <td>남아 있는 로컬 브랜치 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 원리</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>prune = 가지치기</dt>
+              <dd>원격에서 사라진 브랜치의 오래된 추적 참조를 정리합니다.</dd>
+            </div>
+            <div>
+              <dt>-r = remote</dt>
+              <dd>원격 추적 브랜치 목록을 출력합니다.</dd>
+            </div>
+            <div>
+              <dt>-d = delete</dt>
+              <dd>안전성 검사를 거쳐 로컬 브랜치를 삭제합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과 및 주의사항</strong>
+            <p>
+              git branch -d는 GitHub 원격 브랜치를 삭제하지 않습니다. squash
+              merge 후에는 PR이 병합되었더라도 로컬 브랜치 삭제가 거부될 수
+              있습니다. 보존할 커밋을 확인하지 않고
+              <code>git branch -D</code>로 강제 삭제하지 않습니다.
+            </p>
+          </div>
+        </section>
+
+        <!-- 10. 상태 확인 -->
+        <section id="inspect" class="panel remote-v">
+          <div class="section-head">
+            <span class="number">10</span>
+            <div>
+              <h2>현재 Git 상태와 연결 정보 확인</h2>
+              <p>필요할 때 각각 실행하는 조회 명령어입니다.</p>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>
+                Git 상태 확인 명령어
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">명령어</th>
+                  <th scope="col">기능 및 실행 결과</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>pwd</code></td>
+                  <td>현재 작업 폴더 경로 출력</td>
+                </tr>
+                <tr>
+                  <td><code>ls</code></td>
+                  <td>파일과 폴더 목록 출력</td>
+                </tr>
+                <tr>
+                  <td><code>git status</code></td>
+                  <td>현재 브랜치와 변경 상태 표시</td>
+                </tr>
+                <tr>
+                  <td><code>git branch</code></td>
+                  <td>로컬 브랜치 목록 표시</td>
+                </tr>
+                <tr>
+                  <td><code>git branch -a</code></td>
+                  <td>로컬과 원격 추적 브랜치 목록 표시</td>
+                </tr>
+                <tr>
+                  <td><code>git remote -v</code></td>
+                  <td>원격 저장소의 fetch/push 주소 출력</td>
+                </tr>
+                <tr>
+                  <td><code>git log --oneline -5</code></td>
+                  <td>최근 커밋 최대 5개를 한 줄씩 표시</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>영어 뜻과 옵션</h3>
+          <dl class="definitions compact">
+            <div>
+              <dt>pwd = Print Working Directory</dt>
+              <dd>현재 폴더 경로를 출력합니다.</dd>
+            </div>
+            <div>
+              <dt>ls = List</dt>
+              <dd>
+                파일과 폴더 목록을 출력합니다.
+                <code>ls -a</code>는 숨김 항목도 표시합니다.
+              </dd>
+            </div>
+            <div>
+              <dt>status = 상태</dt>
+              <dd>작업 트리와 스테이징 상태를 표시합니다.</dd>
+            </div>
+            <div>
+              <dt>branch = 가지 / -a = all(전체)</dt>
+              <dd>브랜치 목록을 표시합니다.</dd>
+            </div>
+            <div>
+              <dt>remote = 원격 / -v = verbose(상세)</dt>
+              <dd>원격 저장소 이름과 URL을 표시합니다.</dd>
+            </div>
+            <div>
+              <dt>log = 기록 / --oneline = 한 줄 / -5 = 최대 5개</dt>
+              <dd>최근 커밋을 간단히 표시합니다.</dd>
+            </div>
+          </dl>
+
+          <div class="tip">
+            <strong>실행 결과</strong>
+            <p>
+              현재 폴더, 브랜치, 수정 파일, 원격 연결 주소와 커밋 이력을 확인할
+              수 있습니다. 이 절의 명령어는 작업 파일을 변경하지 않습니다.
+            </p>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>
+            <strong>기억할 순서:</strong>
+            상태 확인 → 안전하게 작업 → 결과 확인
+          </p>
+          <p>
+            Git 명령어는 현재 저장소 상태에 따라 실행 결과가 달라질 수 있습니다.
+          </p>
+          <a href="#main-content">맨 위로 ↑</a>
+        </footer>
+      </main>
+    </div>
+
+    <!-- 명령어 복사 기능 -->
+    <script>
+      // 표의 명령어마다 복사 버튼을 생성합니다.
+      document.querySelectorAll("td > code").forEach((code) => {
+        const cell = code.parentElement;
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "copy-button";
+        button.textContent = "복사";
+
+        button.setAttribute("aria-label", code.textContent + " 복사");
+
+        button.addEventListener("click", async () => {
+          try {
+            // 클립보드에 명령어 복사
+            await navigator.clipboard.writeText(code.textContent);
+
+            button.textContent = "복사됨";
+            button.classList.add("copied");
+          } catch (error) {
+            // 복사가 차단되면 명령어를 선택합니다.
+            const range = document.createRange();
+            range.selectNodeContents(code);
+
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            button.textContent = "선택됨";
+          }
+
+          setTimeout(() => {
+            button.textContent = "복사";
+            button.classList.remove("copied");
+          }, 1800);
+        });
+
+        cell.appendChild(button);
+      });
+    </script>
   </body>
 </html>
