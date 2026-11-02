@@ -1,0 +1,7 @@
+# 로컬 설정과 비밀 값
+.env
+.env.local
+
+# 운영체제와 실행 로그
+.DS_Store
+*.log
